@@ -5,9 +5,9 @@
 Polynom::Polynom() { head = new Monom{0, 0, nullptr}; }
 
 Polynom::~Polynom() {
-  Monom* curr = head;
+  Monom *curr = head;
   while (curr) {
-    Monom* tmp = curr;
+    Monom *tmp = curr;
     curr = curr->next;
     delete tmp;
   }
@@ -22,10 +22,11 @@ int Polynom::makeDegree(int x, int y, int z) const {
 }
 
 void Polynom::addMonom(double coeff, int degree) {
-  if (coeff == 0) return;
+  if (coeff == 0)
+    return;
 
-  Monom* prev = head;
-  Monom* curr = head->next;
+  Monom *prev = head;
+  Monom *curr = head->next;
 
   while (curr && curr->degree > degree) {
     prev = curr;
@@ -39,16 +40,16 @@ void Polynom::addMonom(double coeff, int degree) {
       delete curr;
     }
   } else {
-    Monom* node = new Monom{coeff, degree, curr};
+    Monom *node = new Monom{coeff, degree, curr};
     prev->next = node;
   }
 }
 
-Polynom Polynom::operator+(const Polynom& other) const {
+Polynom Polynom::operator+(const Polynom &other) const {
   Polynom result;
 
-  Monom* a = head->next;
-  Monom* b = other.head->next;
+  Monom *a = head->next;
+  Monom *b = other.head->next;
 
   while (a && b) {
     if (a->degree > b->degree) {
@@ -77,30 +78,31 @@ Polynom Polynom::operator+(const Polynom& other) const {
   return result;
 }
 
-Polynom Polynom::operator-(const Polynom& other) const {
+Polynom Polynom::operator-(const Polynom &other) const {
   return *this + (other * -1.0);
 }
 
 Polynom Polynom::operator*(double scalar) const {
   Polynom result;
 
-  for (Monom* curr = head->next; curr; curr = curr->next) {
+  for (Monom *curr = head->next; curr; curr = curr->next) {
     result.addMonom(curr->coeff * scalar, curr->degree);
   }
 
   return result;
 }
 
-Polynom Polynom::operator*(const Polynom& other) const {
+Polynom Polynom::operator*(const Polynom &other) const {
   Polynom result;
 
-  for (Monom* a = head->next; a; a = a->next) {
-    for (Monom* b = other.head->next; b; b = b->next) {
+  for (Monom *a = head->next; a; a = a->next) {
+    for (Monom *b = other.head->next; b; b = b->next) {
       int x = getX(a->degree) + getX(b->degree);
       int y = getY(a->degree) + getY(b->degree);
       int z = getZ(a->degree) + getZ(b->degree);
 
-      if (x > 9 || y > 9 || z > 9) throw std::runtime_error("Degree overflow");
+      if (x > 9 || y > 9 || z > 9)
+        throw std::runtime_error("Degree overflow");
 
       int deg = makeDegree(x, y, z);
       result.addMonom(a->coeff * b->coeff, deg);
@@ -111,7 +113,7 @@ Polynom Polynom::operator*(const Polynom& other) const {
 }
 
 void Polynom::print() const {
-  Monom* curr = head->next;
+  Monom *curr = head->next;
 
   while (curr) {
     std::cout << curr->coeff << "(deg=" << curr->degree << ") ";
@@ -120,12 +122,13 @@ void Polynom::print() const {
   std::cout << std::endl;
 }
 
-bool Polynom::operator==(const Polynom& other) const {
-  Monom* a = head->next;
-  Monom* b = other.head->next;
+bool Polynom::operator==(const Polynom &other) const {
+  Monom *a = head->next;
+  Monom *b = other.head->next;
 
   while (a && b) {
-    if (a->degree != b->degree || abs(a->coeff - b->coeff) > 1e-6) return false;
+    if (a->degree != b->degree || abs(a->coeff - b->coeff) > 1e-6)
+      return false;
     a = a->next;
     b = b->next;
   }
